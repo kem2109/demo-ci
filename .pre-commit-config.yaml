@@ -1,0 +1,45 @@
+# =============================================================
+# .pre-commit-config.yaml
+# Tu dong chay cac hook nay truoc moi lan git commit
+#
+# Cach dung:
+#   Lan dau: uv run pre-commit install   <- dang ky hook vao .git/
+#   Chay thu cong: uv run pre-commit run --all-files
+#   Bo qua 1 lan: git commit --no-verify
+# =============================================================
+
+repos:
+  # ----------------------------------------------------------
+  # 1. RUFF - Lint + Format (thay the flake8, isort, black)
+  # ----------------------------------------------------------
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.17.0  # Khop voi version ruff trong pyproject.toml
+    hooks:
+      - id: ruff-check      # Lint: kiem tra loi code
+        args: [--fix]       # Tu sua loi fixable
+      - id: ruff-format     # Format: format code
+
+  # ----------------------------------------------------------
+  # 2. MYPY - Static Type Checker
+  # ----------------------------------------------------------
+  - repo: local
+    hooks:
+      - id: mypy
+        name: mypy (type check)
+        entry: uv run mypy
+        language: system
+        types: [python]
+        pass_filenames: false   # mypy tu doc files tu pyproject.toml
+
+  # ----------------------------------------------------------
+  # 3. PYTEST - Chay toan bo test suite + coverage
+  # ----------------------------------------------------------
+  - repo: local
+    hooks:
+      - id: pytest
+        name: pytest (tests + coverage)
+        entry: uv run pytest
+        language: system
+        types: [python]
+        pass_filenames: false   # pytest tu doc testpaths tu pyproject.toml
+        always_run: true        # Luon chay du khong co file python thay doi

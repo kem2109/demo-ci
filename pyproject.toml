@@ -1,0 +1,114 @@
+[project]
+name = "project-iaw"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = []
+
+[project.scripts]
+project-iaw = "project_iaw:main"
+
+[build-system]
+requires = ["uv_build>=0.13.0,<0.14.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "mypy>=2.4.0",
+    "pip-audit>=2.10.1",
+    "pre-commit>=4.7.0",
+    "pytest>=9.1.1",
+    "pytest-cov>=7.1.0",
+    "ruff>=0.17.0",
+]
+# ==========================================
+# 1. CẤU HÌNH RUFF (Linter & Formatter)
+# ==========================================
+[tool.ruff]
+line-length = 88
+indent-width = 4
+target-version = "py312" # Đổi theo phiên bản Python bạn đang dùng (vd: py311, py312)
+exclude = [
+    ".git",
+    ".mypy_cache",
+    ".pytest_cache",
+    ".ruff_cache",
+    ".venv",
+    "__pypackages__",
+    "build",
+    "dist",
+]
+
+[tool.ruff.lint]
+# E, W: pycodestyle
+# F: Pyflakes
+# I: isort (tự động sắp xếp import)
+# B: flake8-bugbear (bắt các lỗi tiềm ẩn và thiết kế tồi)
+# UP: pyupgrade (gợi ý cú pháp Python mới nhất)
+# S: flake8-bandit (kiểm tra bảo mật tĩnh trên code - rất hợp khi đi cùng pip-audit)
+# SIM: flake8-simplify (tối giản hóa code)
+select = ["E", "W", "F", "I", "B", "UP", "S", "SIM"]
+ignore = [
+    "E501", # Bỏ qua lỗi độ dài dòng (để ruff format tự xử lý)
+]
+
+# Cho phép dùng câu lệnh `assert` và một số quy tắc lỏng hơn trong thư mục tests
+[tool.ruff.lint.per-file-ignores]
+"tests/**/*.py" = ["S101"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+skip-magic-trailing-comma = false
+line-ending = "auto"
+
+# ==========================================
+# 2. CẤU HÌNH MYPY (Static Type Checker)
+# ==========================================
+[tool.mypy]
+python_version = "3.12"
+strict = true                  # Bật chế độ kiểm tra kiểu dữ liệu nghiêm ngặt
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true   # Bắt buộc mọi hàm phải có type hint
+ignore_missing_imports = true  # Bỏ qua lỗi nếu thư viện bên thứ 3 không có file stub
+files = ["src/project_iaw"]    # Target mặc định khi chạy `mypy` không có argument
+exclude = ["tests/", ".venv/"]
+
+# Tắt bớt độ gắt của Mypy trong thư mục tests để viết test nhanh hơn
+[[tool.mypy.overrides]]
+module = "tests.*"
+disallow_untyped_defs = false
+
+# ==========================================
+# 3. CẤU HÌNH PYTEST & COVERAGE
+# ==========================================
+[tool.pytest.ini_options]
+minversion = "8.0"
+# Tự động đo coverage tại thư mục `src` (hoặc đổi `src` thành tên thư mục code của bạn, hoặc dấu `.`)
+addopts = "-ra -q --strict-markers --cov=src/project_iaw --cov-report=term-missing"
+testpaths = ["tests"]
+pythonpath = [".", "src"]
+
+[tool.coverage.run]
+branch = true
+source = ["src/project_iaw"] # Package chính của dự án
+omit = [
+    "tests/*",
+    "*/migrations/*",
+]
+
+[tool.coverage.report]
+show_missing = true
+skip_covered = false
+fail_under = 80 # Báo lỗi đỏ nếu độ phủ test (coverage) tụt xuống dưới 80%
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "if self.debug:",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if __name__ == .__main__.:",
+    "if TYPE_CHECKING:",
+]

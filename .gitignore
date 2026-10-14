@@ -1,0 +1,100 @@
+# ==========================================
+# PYTHON
+# ==========================================
+__pycache__/
+*.py[cod]
+*.class
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+eggs/
+parts/
+var/
+sdist/
+develop-eggs/
+.installed.cfg
+lib/
+lib64/
+wheels/
+
+# ==========================================
+# VIRTUAL ENVIRONMENT
+# ==========================================
+.venv/
+venv/
+ENV/
+env/
+
+# ==========================================
+# TOOL CACHES
+# ==========================================
+.mypy_cache/
+.pytest_cache/
+.ruff_cache/
+
+# ==========================================
+# COVERAGE
+# ==========================================
+.coverage
+.coverage.*
+coverage.xml
+htmlcov/
+
+# ==========================================
+# UV
+# ==========================================
+# uv.lock nen duoc commit vao git de dam bao
+# reproducible builds (khong ignore uv.lock)
+
+# ==========================================
+# DISTRIBUTION / PACKAGING
+# ==========================================
+.Python
+*.manifest
+*.spec
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-link
+
+# ==========================================
+# TESTING
+# ==========================================
+.tox/
+.nox/
+
+# ==========================================
+# TYPE CHECKING
+# ==========================================
+.pytype/
+.pyre/
+
+# ==========================================
+# IDE & EDITORS
+# ==========================================
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# ==========================================
+# PIP-AUDIT (Security scanning)
+# ==========================================
+# Ignore noi dung report trong pip-audit/
+pip-audit/*
+!pip-audit/.gitkeep
+
+# Ignore noi dung cache nhung giu lai folder qua .gitkeep
+.pip-audit-cache/*
+!.pip-audit-cache/.gitkeep
+
+# ==========================================
+# ENV FILES (chua secrets - KHONG commit)
+# ==========================================
+.env
+.env.*
+!.env.example
